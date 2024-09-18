@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAS Portal Document upload</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+
+<body>
+    <div class="nav">
+        <div class="nav-h">
+            <div class="header">
+                <div class="logo">
+                    <a class="navbar-brand" href="https://pas.org.in/" target="_blank">
+                        <img src="https://pas.org.in/image/company_logo?img_id=17511&t=1712643133933" alt="PAS Logo">
+                    </a>
+                </div>
+                <div id="custom-alert" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+                    <div style="background:rgb(0, 0, 0); padding:20px; border-radius:5px;"> You will be logged out in 60 seconds due to inactivity.
+                    </div>
+                </div>
+    
+                <div class="login-form" id="login">
+                    <div id="errorMsg"></div>
+                    <input type="text" placeholder="Login ID" id="username">
+                    
+                    <div class="password-wrapper">
+                        <input type="password" placeholder="Password" id="password">
+                        <span class="toggle-password" onclick="togglePassword()">
+                            <img id="eyeIcon" src="https://img.icons8.com/ios-glyphs/30/000000/visible.png" alt="Show Password" />
+                        </span>
+                    </div>
+    
+                    <button class="login-btn" id="login-btn" onclick="login()">Login</button>
+                    <div class="loader" id="loader1"></div>
+                </div>
+    
+                <div class="login-form" id="logout" style="display: none;">
+                    <p>Welcome ULB!!  - <strong id="ulbDisplay" name="ulb" style="padding-right: 30px;"></strong></p>
+                    <button class="login-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+
+    
+
+    <div class="form" id="dp-1" style="display: block;" >
+
+            <h1 style="text-align: center; margin-top: 40px; color: rgba(52, 85, 52, 0.925);">| Document Upload Portal |</h1>
+            <h1 style="text-align: center; margin-bottom: 40px;">PERFORMANCE ASSESSMENT SYSTEM (PAS) PROJECT </h1>
+
+        <div class="background-2">
+            <div class="container">
+                <img class="photo" src="https://pas.org.in/Portal/images/imageGallery5/1.jpg" alt="PAS banner">
+
+                <div>
+                    <br><br><br>
+                    <h3>This portal is designed for uploading documents only.</h3>
+                    <br>
+                    <br><br>
+                    <p >For data entry portal, click on the below button</a>
+                        <br>
+                        <br>
+                    <button class="login-btn" onclick="window.open('https://pas.org.in/', '_blank')" >Data entry portal</button>
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <div class="check" id="filesSection" style="display:none;">
+        <td>
+            <p class="background-1" >PERFORMANCE ASSESSMENT SYSTEM (PAS) PROJECT <br> ULB - <span id="ulbDisplay1" name="ulb"></span>, <span id="state1" name="state"></span></p>
+        </td>
+        <div class="background-2">
+            <div class="box">
+                <div class="box-h">Document Upload Status</div>
+                <div class="logo" style="padding: 0% 5% 0%; display: flex; align-items: center; justify-content: center; color: rgb(97, 163, 54); background-color: white;">
+                    <img id="tick" src="https://i.gifer.com/7efs.gif" alt="Submission done">
+                    <div>
+                    <h2>You have successfully uploaded the documents for FY 2023-24</h2>
+                    <p id="submissionDetails"></p>
+                    </div>
+                    <button class="login-btn" style="margin-left: 10% ;" onclick="reSubmission()">Re - submission</button>
+                </div>
+                
+                <div style="display: flex;  align-items: center; justify-content:space-between; padding-right: 40px; margin: 1% 4% 1% 5%;" >
+                    <p style="text-align: center;  color:#365F91 ;">Here are the details of the submitted documents</p>
+                    
+                </div>
+                
+                <div id="urlsContainer"></div>
+                    <br>
+                    <Br>
+                    </Br>
+       
+            </div>
+        </div>
+    </div>
+
+    <div class="form" id="dp-2">
+
+        <td>
+            <p class="background-1" >PERFORMANCE ASSESSMENT SYSTEM (PAS) PROJECT <br>ULB - <span id="ulbDisplay2" name="ulb"></span>, <span id="state" name="state"></span></p>
+        </td>
+        <td>
+          <div class="scroll-buttons background-2">
+            <button id="b1" class="scroll-btn active" onclick="scrollToBottom('General Information')">General Information</button>
+            <button id="b2" class="scroll-btn" onclick="scrollToBottom('Water Supply')">Water Supply</button>
+            <button id="b3" class="scroll-btn" onclick="scrollToBottom('Sewerage and Drainage')">Sewerage and Drainage</button>
+            <button id="b4" class="scroll-btn" onclick="scrollToBottom('Solid Waste Management')">Solid Waste Management</button>
+            <button id="b5" class="scroll-btn" onclick="scrollToBottom('Ulb')">ULB's Undertaking</button>
+        </div>
+        </td>
+
+<!--------------------------  GI ---------------------------->
+        <div id="sheetN">
+            <h2 style="text-align: center;  color:#365F91 ;">General Information: FY 2023-2024 </h2>
+        </div>
+       
+        <div class="background-2">
+            <div class="box">
+                <div class="box-h">Upload Documents</div>
+                    <p style="text-align: end; font-size: 12px; margin-right: 40px;"><span class="required">*</span> Please ensure all fields are completed accurately, and attach the necessary files.</p>
+        
+                    <form id="gi" enctype="multipart/form-data">
+                        <div class="box-c">
+                            <p> 1. Total population of the city (Present Year)<span class="required">*</span> </p>
+                            <p id="error1" class="f-error" >The file size is too large. Please choose a file that is smaller than 2 MB.</p>
+                            <div class="box-e">
+                                <select id="q1" name="q1" required>
+                                    <option value="" selected disabled> Select document </option>
+                                    <option value="Census Population Projections report"> Census Population Projections report</option>
+                                    <option value="Population survey records "> Population survey records </option>
+                                </select>
+                                <input id="fileInput1" name="file1" type="file" accept="application/pdf" onchange="checkFile(this, 'error1')">
+                            </div>
+                        </div>
+                    
+                        <div class="box-c">
+                            <p> 2.  Total households in city (Present Year) <span class="required">*</span></p>
+                            <p id="error2" class="f-error" >The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q2" name="q2" required>
+                                    <option value="" selected disabled> Select document </option>
+                                    <option value="Property tax database/ survey report">Property tax database/ survey report</option>
+                                    <option value="Population survey report /IHHL survey/other surveys">Population survey report /IHHL survey/other surveys</option>
+                                    <option value="Demand and Collection Book (DCB) register">Demand and Collection Book (DCB) register</option>
+                                    <option value="Certified copy of IWBP/MAINET/ e-governance portal report">Certified copy of IWBP/MAINET/ e-governance portal report</option>
+                                </select>
+                                <input id="fileInput2" name="file2" type="file" accept="application/pdf" onchange="checkFile(this, 'error2')">
+                            </div>
+                        </div>
+                    
+                        <div class="box-c">
+                            <p> 3.   Total properties in the city (Present Year) <span class="required">*</span></p>
+                            <p id="error3" class="f-error" >The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q3" name="q3" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Property tax database/survey report">Property tax database/survey report</option>
+                                    <option value="Population survey report /IHHL survey/other surveys">Population survey report /IHHL survey/other surveys</option>
+                                    <option value="Demand and Collection Book (DCB) register">Demand and Collection Book (DCB) register</option>
+                                    <option value="Certified copy - IWBP/MAINET/e-governance portal report">Certified copy - IWBP/MAINET/e-governance portal report</option>
+                                </select>
+                                <input id="fileInput3" name="file3" type="file" accept="application/pdf" onchange="checkFile(this, 'error3')">
+                            </div>
+                            <div class="box-d">
+                                <p style="display:flex; color:rgb(37, 145, 172); font-style: italic;">Please ensure that the number of properties exceeds the number of households in cities. Exclude open plots and abandoned properties from the total count.</p> 
+                            </div>
+                        </div>
+<!--
+                        <div class="box-c">
+                            <p> 4.   Total Slum population of city (Present Year) <span class="required">*</span> </p>
+                            <p id="error1" class="f-error" >The file size is too large. Please choose a file that is smaller than 2 MB.</p>
+                            <div class="box-e">
+                                <select id="q1" name="q1" required>
+                                    <option value="" selected disabled> Select document </option>
+                                    <option value="2011 census population extrapolated upto last financial year.">2011 census population extrapolated upto last financial year.</option>
+                                    <option value="Population survey records if available">Population survey records if available (population survey conducted at ULB level)</option>
+                                    <option value="Data without record along with ULB undertaking">Data without record along with ULB undertaking</option>
+                                </select>
+                                <input id="fileInput1" name="file1" type="file" accept="application/pdf" onchange="checkFile(this, 'error1')">
+                            </div>
+                        </div>
+                    
+                        <div class="box-c">
+                            <p> 5.  Total Slum households in city (Present Year) <span class="required">*</span></p>
+                            <p id="error2" class="f-error" >The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q2" name="q2" required>
+                                    <option value="" selected disabled> Select document </option>
+                                    <option value="Property tax survey revision report- Property tax database">Property tax survey revision report- Property tax database</option>
+                                    <option value="Any other population survey if available for eg. IHHL survey etc">Any other population survey if available for eg. IHHL survey etc</option>
+                                    <option value="Demand and Collection Book (DCB) register">Demand and Collection Book (DCB) register</option>
+                                    <option value="Certified copy of report generated from IWBP/ MAINET/ e-governance portal">Certified copy of report generated from IWBP/ MAINET/ e-governance portal</option>
+                                    <option value="Data without record along with ULB undertaking">Data without record along with ULB undertaking</option>
+                                </select>
+                                <input id="fileInput2" name="file2" type="file" accept="application/pdf" onchange="checkFile(this, 'error2')">
+                            </div>
+-->                           
+                            <div class="box-f">
+                                <button class="button-s" id="giNext" onclick="giNextFileCheck(event)">Save and Next </button>
+                                </div>
+                        
+                    </form>
+
+
+<!--------------------------  WS ---------------------------->
+
+                    <form id="ws" enctype="multipart/form-data">
+                        <div class="box-c">            
+                            <p> 1. Total water supply connection in the city <span class="required">*</span> </p>
+                            <p id="error4" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p>
+                            <div class="box-e">
+                                <select id="q4" name="q4" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Water tax/user charges report from IWBP/MAINET">Water tax/user charges report from IWBP/MAINET</option>
+                                    <option value="Certified copy of water connections register (summary report)">Certified copy of water connections register (summary report)</option>
+                                    <option value="Illegal Water Connection Survey Report ">Illegal Water Connection Survey Report </option>
+                                    <option value="Register maintained by water supply department (Digitized/Manual) ">Register maintained by water supply department (Digitized/Manual)</option>
+                                    <option value="Certified report of mission dashboards like AMRUT">Certified report of mission dashboards like AMRUT </option>
+                                    <option value="DPR of a water supply - project (prepared by an external agency)">DPR of a water supply - project (prepared by an external agency)</option>
+                                </select>
+                                <input id="fileInput4" name="file4" type="file" accept="application/pdf" onchange="checkFile(this, 'error4')">
+                            </div>
+                        </div>
+
+                        <div class="box-c">            
+                            <p> 2. Total meter connection in the city <span class="required">*</span> </p>
+                            <p id="error5" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p>
+                            <div class="box-e">
+                                <select id="q5" name="q5" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Copy of Logbook along with metered and unmetered connections with standposts ">Copy of Logbook along with metered and unmetered connections with standposts </option>
+                                    <option value="Certified copy of water connections register (summary report) with standposts">Certified copy of water connections register (summary report) with standposts</option>
+                                    <option value="Water tax/user charges report from IWBP/MAINET">Water tax/user charges report from IWBP/MAINET</option>
+                                    <option value="Number of Bulk meter water supply connections no. of HHs covered">Number of Bulk meter water supply connections no. of HHs covered</option>
+                                </select>
+                                <input id="fileInput5" name="file5" type="file" accept="application/pdf" onchange="checkFile(this, 'error5')">
+                            </div>
+                            <div class="box-d">
+                                <p style="display:flex; color:rgb(37, 145, 172); font-style: italic;">Document should show number of working domestic connections (metered/ unmetered)</p> 
+                            </div>
+                        </div>
+                    
+                    
+                        <div class="box-c">
+                            <p> 3. Total amount of water supplied in the city <span class="required">*</span></p>
+                            <p id="error6" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q6" name="q6" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Computerised logbook based on SCADA">Computerised logbook based on SCADA</option>
+                                    <option value="Manual logbooks of flow meter readings at the outlet of WTP">Manual logbooks of flow meter readings at the outlet of WTP</option>
+                                    <option value="Compiled bills of water lifting from the Irrigation Department ">Compiled bills of water lifting from the Irrigation Department <span class="required">*</span></option>
+                                    <option value="Log records at WDS/ Water Supply Department ">Log records at WDS/ Water Supply Department </option>
+                                </select>
+                                <input id="fileInput6" name="file6" type="file" accept="application/pdf" onchange="checkFile(this, 'error6')">
+                            </div>
+                        </div>
+                    
+                        <div class="box-c">
+                            <p> 4.  Total amount of water bill and un-billed <span class="required">*</span></p>
+                            <p id="error7" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q7" name="q7" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="SCADA report of volume of water billed/ sold in one month">SCADA report of volume of water billed/ sold in one month</option>
+                                    <option value="Billed/sold water report from IWBP/MAINET">Billed/sold water report from IWBP/MAINET</option>
+                                    <option value="Document showing total water meter reading at WTP/WDS">Document showing total water meter reading at WTP/WDS</option>
+                                    <option value="Manual logbooks of flow meter readings at the outlet of WTP">Manual logbooks of flow meter readings at the outlet of WTP</option>
+                                    <option value="Residential ferrule size in inches and respective total number of connections ">Residential ferrule size in inches and respective total number of connections </option>
+                                    <option value="Certified copy of bucket and stopwatch survey report">Certified copy of bucket and stopwatch survey report</option>
+                                </select>
+                                <input id="fileInput7" name="file7" type="file" accept="application/pdf" onchange="checkFile(this, 'error7')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 5.  Water Supply duration (time) and days in a month <span class="required">*</span></p>
+                            <p id="error8" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q8" name="q8" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Average of valve operation record of 12-month from all zone">Average of valve operation record of 12-month from all zone</option>
+                                    <option value="ULB undertaking for water supply hours">ULB undertaking for water supply hours</option>
+                                    <option value="Copy of sample survey report for supplied hours">Copy of sample survey report for supplied hours</option>
+                                </select>
+                                <input id="fileInput8" name="file8" type="file" accept="application/pdf" onchange="checkFile(this, 'error8')">
+                            </div>
+                        </div>
+                        
+                        <div class="box-c">
+                            <p> 6.  Water testing reports <span class="required">*</span></p>
+                            <p id="error9" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q9" name="q9" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Water testing report (monthly) from authorised lab ">Water testing report (monthly) from authorised lab</option>
+                                    <option value="Daily/ monthly report of the number sample taken at source ">Daily/ monthly report of the number sample taken at source </option>
+                                </select>
+                                <input id="fileInput9" name="file9" type="file" accept="application/pdf" onchange="checkFile(this, 'error9')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 7.  Annual expenditure for water supply <span class="required">*</span></p>
+                            <p id="error10" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q10" name="q10" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Annual expenditure report for water supply">Annual expenditure report for water supply</option>
+                                    <option value="Income expenditure schedule of ULB">Income expenditure schedule of ULB</option>
+                                    <option value="Annual budget document for water supply">Annual budget document for water supply</option>
+                                </select>
+                                <input id="fileInput10" name="file10" type="file" accept="application/pdf" onchange="checkFile(this, 'error10')">
+                            </div>
+                        </div>
+
+                        <div class="box-c">
+                            <p> 8.  Annual revenue for water supply <span class="required">*</span></p>
+                            <p id="error11" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q11" name="q11" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Income expenditure schedule of ULB ">Income expenditure schedule of ULB </option>
+                                    <option value="Demand collection table (DCB table) ">Demand collection table (DCB table) </option>
+                                    <option value="Water tax/user charges report from IWBP/MAINET">Water tax/user charges report from IWBP/MAINET</option>
+                                    <option value="Summary sheet showing total revenue generated by user charges">Summary sheet showing total revenue generated by user charges</option>
+                                    <option value="Sample based proof/ evidence for user charges collection">Sample based proof/ evidence for user charges collection</option>
+                                    <option value="Annual budget document for water supply">Annual budget document for water supply</option>
+                                </select>
+                                <input id="fileInput11" name="file11" type="file" accept="application/pdf" onchange="checkFile(this, 'error11')">
+                            </div>
+                        </div>
+
+                        <div class="box-c">
+                            <p> 9.  Details of Water charges levied on property <span class="required">*</span></p>
+                            <p id="error12" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q12" name="q12" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Copy of property tax/water tax receipt" >  Copy of property tax/water tax receipt  </option>
+                                    <option value="ULB undertaking for water supply charges" >  ULB undertaking for water supply charges  </option>
+                                </select>
+                                <input id="fileInput12" name="file12" type="file" accept="application/pdf" onchange="checkFile(this, 'error12')">
+                            </div>
+                        <div class="box-f">
+                            <button class="button-s" id="wsNext" onclick="wsNextFileCheck(event)">Save and Next </button>
+                        </div>
+                    </div>
+                    </form>
+                
+
+<!--------------------------  SD ---------------------------->
+                    <form id="sd" enctype="multipart/form-data">
+                        <div class="box-c">
+                            <p> 1.  Number of toilets in the city <span class="required">*</span></p>
+                            <p id="error6" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q13" name="q13" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="IHHL survey document showing existing number of individual toilets in the city">IHHL survey document showing existing number of individual toilets in the city</option>
+                                    <option value="Details of residential and establishment areas with functional individual toilets within HHs">Details of residential areas with functional individual toilets within HHs </option>
+                                    <option value="Details areas with functional individual toilets within the establishment">Details areas with functional individual toilets within the establishment<span class="required">*</span></option>
+                                    <option value="Ward wise details of all residential areas with functional Community Toilets">Ward wise details of all residential areas with functional Community Toilets<span class="required">*</span></option>
+                                    <option value="Ward wise details of all commercial areas with functional Public Toilets">Ward wise details of all commercial areas with functional Public Toilets<span class="required">*</span></option>
+                                    <option value="Total number of toilets with sewerage connections list">Total number of toilets with sewerage connections list</option>
+                                </select>
+                                <input id="fileInput13" name="file13" type="file" accept="application/pdf" onchange="checkFile(this, 'error13')">
+                            </div>
+                        </div>
+                        <div class="box-c">               
+                            <p>2. Number of sewer connections in the city</p>
+                            <p id="error14" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q14" name="q14" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Sewerage tax/user charges report from IWBP/MAINET">Sewerage tax/user charges report from IWBP/MAINET</option>
+                                    <option value="Certified copy of Sewage connection register ">Certified copy of Sewage connection register </option>
+                                    <option value="Records of existing sewer network connections and new sewage connections">Records of existing sewer network connections and new sewage connections</option>
+                                    <option value="Proof and list of HHs connected to Sewer Network">Proof and list of HHs connected to Sewer Network<span class="required">*</span></option>
+                                    <option value="ULB Sewerage network layout plan of ULB">ULB Sewerage network layout plan of ULB</option>
+                                    <option value="Other supporting document showing sewer line coverage">Other supporting document showing sewer line coverages</option>
+                                </select>
+                                <input id="fileInput14" name="file14" type="file" accept="application/pdf" onchange="checkFile(this, 'error14')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 3.  Total amount of wastewater collected <span class="required">*</span></p>
+                            <p id="error15" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q15" name="q15" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="STP logbook- showing daily collection of sewage in MLD (12-month abstract)">STP logbook- showing daily collection of sewage in MLD (12-month abstract)<span class="required">*</span></option>
+                                    <option value="WTP logbook- Total water supplied in one month (12-month abstract)">WTP logbook- Total water supplied in one month (12-month abstract)<span class="required">*</span></option>
+                                    <option value="Logbook showing water supply from other private source 12 month abstract (eg. Borewells)">Logbook showing water supply from other private source 12 month abstract (eg. Borewells)<span class="required">*</span></option>
+                                </select>
+                                <input id="fileInput15" name="file15" type="file" accept="application/pdf" onchange="checkFile(this, 'error15')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 4.  Wastewater treatment plants details (Capacity) <span class="required">*</span></p>
+                            <p id="error16" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q16" name="q16" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="ULB declaration stating capacity of Sewage treatment plant">ULB declaration stating capacity of Sewage treatment plant<span class="required">*</span></option>
+                                    <option value="STP work completion certificate showing STP capacity ">STP work completion certificate showing STP capacity </option>
+                                </select>
+                                <input id="fileInput16" name="file16" type="file" accept="application/pdf" onchange="checkFile(this, 'error16')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 5.  Treated wastewater testing reports <span class="required">*</span></p>
+                            <p id="error17" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q17" name="q17" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Documentation of the sampling process number of samples tested per month">Documentation of the sampling process number of samples tested per month <span class="required">*</span></option>
+                                    <option value="Document showing ULB having its own laboratory equipment for testing">Document showing ULB having its own laboratory equipment for testing<span class="required">*</span></option>
+                                </select>
+                                <input id="fileInput17" name="file17" type="file" accept="application/pdf" onchange="checkFile(this, 'error17')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 6.  Complaints and redressal details  <span class="required">*</span></p>
+                            <p id="error18" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q18" name="q18" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="No. of complaints received and redressed report from Swachh city app">No. of complaints received and redressed report from Swachh city app</option>
+                                    <option value="Report of any other app/ software in the ULB used to register/ resolve complaints. ">Report of any other app/ software in the ULB used to register/ resolve complaints. </option>
+                                    <option value="Complaints received and redressed every month register maintained at ULB">Complaints received and redressed every month register maintained at ULB</option>
+                                </select>
+                                <input id="fileInput18" name="file18" type="file" accept="application/pdf" onchange="checkFile(this, 'error18')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 7.  Annual expenses for sanitation service <span class="required">*</span></p>
+                            <p id="error19" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q19" name="q19" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Annual expenditure report for sanitation ">Annual expenditure report for sanitation</option>
+                                    <option value="Income expenditure schedule of ULB">Income expenditure schedule of ULB</option>
+                                    <option value="Annual budget document for sanitation">Annual budget document for sanitation</option>
+                                </select>
+                                <input id="fileInput19" name="file19" type="file" accept="application/pdf" onchange="checkFile(this, 'error19')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 8.  Annual revenue for sanitation service <span class="required">*</span></p>
+                            <p id="error20" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q20" name="q20" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Income expenditure schedule of ULB ">Income expenditure schedule of ULB </option>
+                                    <option value="Demand collection table (DCB table) ">Demand collection table (DCB table) </option>
+                                    <option value="Water tax/user charges report from IWBP/MAINET">Water tax/user charges report from IWBP/MAINET</option>
+                                    <option value="Summary sheet showing total revenue generated by user charges">Summary sheet showing total revenue generated by user charges</option>
+                                    <option value="Sample based proof/ evidence for user charges collection">Sample based proof/ evidence for user charges collection</option>
+                                    <option value="Annual budget document for sanitation">Annual budget document for Sanitation</option>
+
+                                </select>
+                                <input id="fileInput20" name="file20" type="file" accept="application/pdf" onchange="checkFile(this, 'error20')">
+                            </div>
+                        </div>
+                        <div class="box-c">
+                            <p> 9.  Details of sanitation tax levied on property<span class="required">*</span></p>
+                            <p id="error21" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                            <div class="box-e">
+                                <select id="q21" name="q21" required>
+                                    <option value="" selected disabled>  Select document  </option>
+                                    <option value="Copy of property tax/water tax receipt" >  Copy of property tax/water tax receipt  </option>
+                                    <option value="ULB undertaking for sanitation charges" >  ULB undertaking for sanitation charges  </option>
+                                </select>
+                                <input id="fileInput21" name="file21" type="file" accept="application/pdf" onchange="checkFile(this, 'error21')">
+                            </div>
+                            <div class="box-f">
+                                <button class="button-s" id="sdNext" onclick="sdNextFileCheck(event)">Save and Next </button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                
+    
+<!--------------------------  SWM ----------------------------> 
+            <form id="swm" enctype="multipart/form-data">
+                <div class="box-c">
+                    <p> 1. Number of Households covered by Door to Door Collection <span class="required">*</span></p>
+                    <p id="error22" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q22" name="q22" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="SWM tax/user charges report from IWBP/MAINET ">SWM tax/user charges report from IWBP/MAINET</option>
+                            <option value="Garbage collection vehicle predefined route-map  ">Garbage collection vehicle predefined route-map </option>
+                            <option value="Signed declaration of list of community bins in the ULB ">Signed declaration of list of community bins in the ULB</option>
+                        </select>
+                        <input id="fileInput22" name="file22" type="file" accept="application/pdf" onchange="checkFile(this, 'error22')">
+                    </div>
+                </div>
+                <div class="box-c">               
+                    <p>2. Total Waste Generated and transportation in the city</p>
+                    <p id="error23" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q23" name="q23" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="Total carrying capacity of wet waste & dry waste compartment ">Total carrying capacity of wet waste & dry waste compartment</option>
+                            <option value="Monthly logbook of each wet waste processing facility 12 month abstract in TPD">Monthly logbook of each wet waste processing facility 12 month abstract in TPD  <span class="required">*</span></option>
+                            <option value="Total quantum of mixed waste arrived at the processing facility">Total quantum of mixed waste arrived at the processing facility</option>
+                            <option value="Approximate waste picked up by informal waste pickers at intermediate points ">Approximate waste picked up by informal waste pickers at intermediate points </option>
+                        </select>
+                        <input id="fileInput23" name="file23" type="file" accept="application/pdf" onchange="checkFile(this, 'error23')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p> 3.  Treatment plants details (Capacity and load received) <span class="required">*</span></p>
+                    <p id="error24" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q24" name="q24" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="Monthly logbook of each wet waste processing facility 12-month abstracts ">Monthly logbook of each wet waste processing facility 12-month abstracts <span class="required">*</span></option>
+                            <option value="Monthly logbook of Material Recovery Facility 12 month abstracts ">Monthly logbook of Material Recovery Facility 12 month abstracts  <span class="required">*</span> </option>
+                            <option value="Logbook of total quantity of waste (wet and dry) intake at processing/ recycling facility. ">Logbook of total quantity of waste (wet and dry) intake at processing/ recycling facility. </option>
+                            <option value="Contract document with recycling agencies showing the amount of waste recycled">Contract document with recycling agencies showing the amount of waste recycled</option>
+                            <option value="Logbook of dry waste recyclables produced in ULB (TPD)">Logbook of dry waste recyclables produced in ULB (TPD)  <span class="required">*</span></option>
+                            <option value="Sample sales receipts/ bills of recyclables sold">Sample sales receipts/ bills of recyclables sold</option>
+                            <option value="Revenue generated by sale of waste by-products">Revenue generated by sale of waste by-products <span class="required">*</span></option>
+                        </select>
+                        <input id="fileInput24" name="file24" type="file" accept="application/pdf" onchange="checkFile(this, 'error24')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p> 4.  Quantity of waste disposed by city on dump site or landfill <span class="required">*</span></p>
+                    <p id="error25" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q25" name="q25" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="Declaration stating list of compliant landfill sites in the ULB.">Declaration stating list of compliant landfill sites in the ULB. </option>
+                            <option value="Declaration stating list of dumpsites/ non-compliant landfills in the ULB">Declaration stating list of dumpsites/ non-compliant landfills in the ULB </option>
+                            <option value="Logbook of waste (inert matter/ refused material) sent to landfill/ dumpsite ">Logbook of waste (inert matter/ refused material) sent to landfill/ dumpsite </option>
+                        </select>
+                        <input id="fileInput25" name="file25" type="file" accept="application/pdf" onchange="checkFile(this, 'error25')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p> 5.  Complaints and redressal details  <span class="required">*</span></p>
+                    <p id="error26" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q26" name="q26" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="No. of complaints received and redressed report from Swachh city app">No. of complaints received and redressed report from Swachh city app</option>
+                            <option value="Report of any other app/ software in the ULB used to register/ resolve complaints. ">Report of any other app/ software in the ULB used to register/ resolve complaints. </option>
+                            <option value="Complaints received and redressed every month register maintained at ULB">Complaints received and redressed every month register maintained at ULB</option>
+                        </select>
+                        <input id="fileInput26" name="file26" type="file" accept="application/pdf" onchange="checkFile(this, 'error26')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p> 6.  Annual expenses for SWM service <span class="required">*</span></p>
+                    <p id="error27" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q27" name="q27" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="Annual expenditure report for water supply">Annual expenditure report for water supply</option>
+                            <option value="Income expenditure schedule of ULB">Income expenditure schedule of ULB</option>
+                            <option value="Annual budget document for water supply">Annual budget document for water supply</option>
+                        </select>
+                        <input id="fileInput27" name="file27" type="file" accept="application/pdf" onchange="checkFile(this, 'error27')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p> 7.  Annual revenue for SWM service <span class="required">*</span></p>
+                    <p id="error28" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q28" name="q28" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="Income expenditure schedule of ULB ">Income expenditure schedule of ULB </option>
+                            <option value="Demand collection table (DCB table) ">Demand collection table (DCB table) </option>
+                            <option value="SWM tax/user charges report from IWBP/MAINET">SWM tax/user charges report from IWBP/MAINET</option>
+                            <option value="Summary sheet showing total revenue generated by user charges">Summary sheet showing total revenue generated by user charges</option>
+                            <option value="Sample based proof/ evidence for user charges collection">Sample based proof/ evidence for user charges collection</option>
+                            <option value="Annual budget document for SWM">Annual budget document for SWM</option>
+                        </select>
+                        <input id="fileInput28" name="file28" type="file" accept="application/pdf" onchange="checkFile(this, 'error28')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p> 8.  Details of SWM tax levied on property<span class="required">*</span></p>
+                    <p id="error29" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">
+                        <select id="q29" name="q29" required>
+                            <option value="" selected disabled>  Select document  </option>
+                            <option value="Copy of property tax/water tax receipt" >  Copy of property tax/water tax receipt  </option>
+                            <option value="ULB undertaking for sanitation charges" >  ULB undertaking for sanitation charges  </option>
+                        </select>
+                        <input id="fileInput29" name="file29" type="file" accept="application/pdf" onchange="checkFile(this, 'error29')">
+                    </div>
+                    <div class="box-f">
+                        <button class="button-s" id="swmNext" onclick="swmNextFileCheck(event)">Save and Next </button>
+                    </div>
+                </div>
+                
+            </form>
+
+
+
+<!--------------------------  ULB ---------------------------->   
+            <form id="ut" enctype="multipart/form-data">
+                <p style="margin-left: 30px;"> <strong> Undertaking of document verification by respective HODs and CO </strong> <span class="required">*</span></p>
+                <div class="box-c">
+                    <p id="error30" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">   
+                        <p style="width: 50%;"> 1. Undertaking by Head of departments (HODs)</p>
+                        <select name="q30" id="q30" style="display: none;">
+                            <option value="HOD undertaking">HOD undertaking</option>
+                        </select>
+                        <input id="fileInput30" name="file30" type="file" accept="application/pdf" onchange="checkFile(this, 'error30')">
+                    </div>
+                </div>
+                <div class="box-c">
+                    <p id="error31" class="f-error">The file size is too large. Please choose a file that is smaller than 2 MB.</p> 
+                    <div class="box-e">   
+                        <p style="width: 50%;"> 2. Undertaking by Chief officer (CO)</p>
+                        <select name="q31" id="q31" style="display: none;" >
+                            <option value="CO undertaking">CO undertaking</option>
+                        </select>
+                        <input id="fileInput31" name="file31" type="file" accept="application/pdf" onchange="checkFile(this, 'error31')">
+                    </div>
+                </div>
+  
+                <div class="box-f">
+                    <button class="button-s" id="submit" type="button" >Submit </button>
+                </div>
+   
+            </form>
+
+
+        </div>
+        </div>
+        
+        
+        
+    </div>
+
+
+    <div id="submitting-popup" class="popup">
+        <div class="popup-content">
+            <div class="loader" id="loader"></div>
+            <p>Please wait, Documents are being uploaded on the server.</p>
+        </div>
+    </div>
+
+    <div id="success-popup" class="popup">
+        <div class="popup-content">
+            <img id="tick" src="https://i.gifer.com/7efs.gif" alt="Submission done">
+            <p>Documents are uploaded successfully, Thank You!! </p>
+            <br>
+            <button class="button-s" onclick="(function() { closePopup(); flashDashboard(); })()">Okay</button>
+        </div>
+    </div>
+
+    <div id="result-popup" class="popup">
+        <div class="popup-content">
+            <div class="loader" id="loader2"></div>
+            <p>Please wait, Your submitted documents details are loading..............!!!</p>
+        </div>
+    </div>
+
+   
+
+    <div class="footer">
+            <p style="text-align: center;">This website is designed by <a href="https://cwas.org.in/" target="_blank">Center for Water and Sanitation</a>. All rights reserved.</p>
+    </div>
+
+
+
+
+<script src="scripts.js"></script>
+</body>
+</html>
